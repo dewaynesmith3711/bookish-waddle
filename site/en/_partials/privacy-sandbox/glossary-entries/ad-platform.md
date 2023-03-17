@@ -1,1 +1,3 @@
-An ad platform is a company that provides services to deliver ads.
+## Ad platform (Adtech) {: #adtech }
+
+A company that provides services to deliver ads.

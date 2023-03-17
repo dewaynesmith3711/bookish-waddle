@@ -7,9 +7,6 @@ origin-trials:
 shipped:
   en: 'Shipped'
 
-beta:
-  en: 'In beta'
-
 developer-trials:
   en: 'Developer trials'
 

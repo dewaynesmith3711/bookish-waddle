@@ -15,8 +15,6 @@ tags:
 
 {% Partial 'devtools/banner.md' %}
 
-*No video for this release.*
-
 <!-- $contentStart -->
 
 ## Clearing Performance Panel on reload {: #perf }
@@ -79,7 +77,7 @@ Previously, the **Sources** panel showed minified content by default. To format 
 Chromium issues: [1383453](https://crbug.com/1383453), [1382752](https://crbug.com/1382752), [1382397](https://crbug.com/1382397) 
 
 
-## Better syntax highlight and inline preview for Vue, SCSS and more {: #highlight }
+## Better syntax highlight and inline preview for Vue, SCSS and more {: #syntax }
 
 The **Sources** panel enhanced the syntax highlighting for several widely-used file formats, enabling you to read code more easily and recognize its structure, including Vue, JSX, Dart, LESS, SCSS, SASS, and inline CSS.
 

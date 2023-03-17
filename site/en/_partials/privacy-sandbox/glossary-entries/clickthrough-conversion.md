@@ -1,1 +1,3 @@
-A click-through conversion is a conversion attributed to an ad that was clicked.
+## Click-through-conversion (CTC) {: #ctc }
+
+A conversion attributed to an ad that was 'clicked'.
