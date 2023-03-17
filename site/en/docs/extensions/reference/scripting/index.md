@@ -2,15 +2,17 @@
 api: scripting
 ---
 
-## Manifest {: #manifest }
+## Manifest
 
-To use the `chrome.scripting` API, declare the `"scripting"` permission in the [manifest][manifest] plus the host permissions for the pages to inject scripts into. Use the [`"host_permissions"`][match-patterns] key or the [activeTab][activetab] permission, which grants temporary host permissions. The following example uses the activeTab permission.
+In order to use the `chrome.scripting` API, you need to specify a
+`"manifest_version"` of `3` or higher and include the `"scripting"` permission
+in your [manifest file][manifest].
 
 ```json
 {
   "name": "Scripting Extension",
   "manifest_version": 3,
-  "permissions": ["scripting", "activeTab"],
+  "permissions": ["scripting"],
   ...
 }
 ```
@@ -19,7 +21,7 @@ To use the `chrome.scripting` API, declare the `"scripting"` permission in the [
 
 You can use the `chrome.scripting` API to inject JavaScript and CSS into
 websites. This is similar to what you can do with [content
-scripts][contentscripts]. But by using the [`chrome.scripting`](/docs/extensions/reference/scripting/) namespace, extensions
+scripts][contentscripts]. But by using the [`chrome.scripting` namespace](/docs/extensions/reference/scripting/), extensions
 can make decisions at runtime.
 
 ### Injection targets
@@ -246,17 +248,15 @@ async function unregisterAllDynamicContentScripts() {
 }
 ```
 
-{% Aside 'important' %}
+{% Aside %}
 
 Unregistering content scripts will not remove scripts or styles that have
 already been injected.
 
 {% endAside %}
 
-[activetab]: /docs/extensions/mv3/manifest/activeTab/
-[contentscripts]: /docs/extensions/mv3/content_scripts
 [manifest]: /docs/extensions/mv3/manifest
-[match-patterns]: /docs/extensions/mv3/match_patterns
-[messaging]: /docs/extensions/mv3/messaging
-[storage]: /docs/extensions/reference/storage
+[contentscripts]: /docs/extensions/mv3/content_scripts
 [webnavigation]: /docs/extensions/reference/webNavigation
+[storage]: /docs/extensions/reference/storage
+[messaging]: /docs/extensions/mv3/messaging

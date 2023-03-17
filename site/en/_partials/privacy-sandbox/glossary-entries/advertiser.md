@@ -1,1 +1,3 @@
-An advertiser is a company that pays to advertise its products.
+## Advertiser {: #advertiser }
+
+A company that pays to advertise its products.

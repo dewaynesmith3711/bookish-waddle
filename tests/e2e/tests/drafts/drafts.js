@@ -20,7 +20,6 @@ const path = require('path');
 
 // eslint-disable-next-line ava/no-import-test-files
 const {distPath} = require('../../utils.js');
-const {isTruthy} = require('../../../../site/_utils/isTruthy.js');
 
 test('Output a non-draft file', t => {
   const filePath = path.join(distPath, 'en/drafts/not-a-draft/index.html');
@@ -66,7 +65,7 @@ test('Outputs a past file with date with timezone', t => {
   t.truthy(statsObj);
 });
 
-if (process.env.NODE_ENV === 'production' && !isTruthy(process.env.CI)) {
+if (process.env.NODE_ENV === 'production') {
   test('Does not output a draft file', t => {
     const filePath = path.join(distPath, 'en/drafts/draft/index.html');
     const error = t.throws(() => fs.statSync(filePath), {instanceOf: Error});

@@ -10,8 +10,6 @@ tags:
   - find-issues
 ---
 
-{% YouTube id='iuZx0kHS0Xs' %}
-
 This guide assumes that you're familiar with inspecting CSS in Chrome DevTools. See [View and change CSS][1] to learn the basics.
 
 ## Inspect the CSS you author {: #styles }

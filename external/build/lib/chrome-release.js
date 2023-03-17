@@ -21,12 +21,6 @@ const SCHEDULE_JSON =
 // these OS' have weird releases, don't include
 const SKIP_OS = ['webview', 'ios'];
 
-// How many previous releases counting back from the current one should be fetched
-const MILESTONES_OFFSET = 48;
-
-// How many milestones should be fetched in total
-const MILESTONES_COUNT = 96;
-
 const {default: fetch} = require('node-fetch');
 
 /**
@@ -74,33 +68,6 @@ async function dataForVersion(channel, version) {
 }
 
 /**
- * Requests a list of Chrome milestones and their relevant
- * release dates from the schedule endpoint.
- * @param {number} offset Number of past releases to fetch
- * @param {number} count Number of releases to fetch in total
- * @returns The fetch releases, with their stable and beta dates
- */
-async function dataForVersions(offset, count) {
-  const url = `${SCHEDULE_JSON}?offset=-${offset}&n=${count}`;
-  const data = await fetch(url).then(r => r.json());
-
-  if (!('mstones' in data) || !data['mstones'][0]) {
-    return {};
-  }
-
-  const milestones = {};
-  for (const mstone of data['mstones']) {
-    milestones[mstone.mstone] = {
-      stableDate: new Date(mstone['stable_date']),
-      earliestBetaDate: new Date(mstone['earliest_beta']),
-      finalBetaDate: new Date(mstone['final_beta']),
-    };
-  }
-
-  return milestones;
-}
-
-/**
  * Generates Chrome version information.
  *
  * While there are many channels, we just care about 'stable' and 'beta'. This method returns a
@@ -109,7 +76,7 @@ async function dataForVersions(offset, count) {
  * Beta is not always stable+1 in the underlying data, it can either be stable+0 or stable+2
  * depending on the point in the release cycle.
  *
- * @return {Promise<{channels: Object<string, !Object>, milestones: Object<string, !Object>}>}
+ * @return {Promise<{channels: Object<string, !Object>}>}
  */
 module.exports = async function buildVersionInformation() {
   const json = await fetch(OMAHA_PROXY_JSON).then(r => r.json());
@@ -174,7 +141,5 @@ module.exports = async function buildVersionInformation() {
     await Promise.all(Object.entries(raw).map(fetchChannelData))
   );
 
-  const milestones = await dataForVersions(MILESTONES_OFFSET, MILESTONES_COUNT);
-
-  return {channels, milestones};
+  return {channels};
 };

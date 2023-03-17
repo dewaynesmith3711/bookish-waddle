@@ -70,7 +70,6 @@ export class SearchBox extends BaseElement {
     this._active = false;
     this.buttonLabel = 'open search';
     this.docsLabel = 'Documentation';
-    this.overviewLabel = 'Overview';
     this.articlesLabel = 'Articles';
     this.blogLabel = 'Blog';
     this.locale = 'en';
@@ -78,8 +77,10 @@ export class SearchBox extends BaseElement {
     this.query = '';
     /** @type AlgoliaCollectionItem[] */
     this.results = [];
-    /** @type {Object<string, AlgoliaCollectionItem[]>} */
-    this.categorisedResults = {};
+    /** @type AlgoliaCollectionItem[] */
+    this.docsResults = [];
+    /** @type AlgoliaCollectionItem[] */
+    this.blogResults = [];
     // Used when rendering categorized results. The counter helps ensure that
     // each result has a unique id that corresponds to its rendered order in
     // the list.
@@ -282,7 +283,8 @@ export class SearchBox extends BaseElement {
     this.query = query.trim();
     if (this.query === '') {
       this.results = [];
-      this.categorisedResults = {};
+      this.docsResults = [];
+      this.blogResults = [];
       return;
     }
 
@@ -320,38 +322,10 @@ export class SearchBox extends BaseElement {
         return r;
       });
 
-      // Further categorize results into docs, articles, blog and the remaining posts.
-      /** @type {AlgoliaCollectionItem[] & {
-       *   filterMutate?: (predicate: (item: AlgoliaCollectionItem) => boolean) => AlgoliaCollectionItem[]
-       * }}
-       */
-      const mutableResults = [...this.results];
-      mutableResults.filterMutate = predicate => {
-        const results = [];
-        let i = 0;
-        while (i < mutableResults.length) {
-          if (predicate(mutableResults[i])) {
-            results.push(mutableResults.splice(i, 1)[0]);
-          } else {
-            i++;
-          }
-        }
-
-        return results;
-      };
-
-      this.categorisedResults = {
-        [this.overviewLabel]: [],
-        [this.docsLabel]: mutableResults.filterMutate(r => r.type === 'doc'),
-        [this.articlesLabel]: mutableResults.filterMutate(
-          r => r.type === 'article'
-        ),
-        [this.blogLabel]: mutableResults.filterMutate(
-          r => r.type === 'blogPost'
-        ),
-      };
-
-      this.categorisedResults[this.overviewLabel] = mutableResults;
+      // Further categorize results into docs and blog posts.
+      this.docsResults = this.results.filter(r => r.type === 'doc');
+      this.articlesResults = this.results.filter(r => r.type === 'article');
+      this.blogResults = this.results.filter(r => r.type === 'blogPost');
     } catch (err) {
       console.error(err);
       console.error(/** @type {any} */ (err).debugData);
@@ -428,6 +402,9 @@ export class SearchBox extends BaseElement {
       return;
     }
 
+    this.blogResults = this.blogResults || [];
+    this.docsResults = this.docsResults || [];
+
     this.resultsCounter = -1;
     return html`
       <div
@@ -436,16 +413,30 @@ export class SearchBox extends BaseElement {
         role="listbox"
         aria-label="${this.placeholder}"
       >
-        ${Object.entries(this.categorisedResults).map(([label, results]) =>
-          results.length
-            ? html`
-                <div class="search-box__result-heading type--label">
-                  ${label.toUpperCase()}
-                </div>
-                ${results.map(this.renderResult)}
-              `
-            : ''
-        )}
+        ${this.blogResults.length
+          ? html`
+              <div class="search-box__result-heading type--label">
+                ${this.blogLabel.toUpperCase()}
+              </div>
+              ${this.blogResults.map(this.renderResult)}
+            `
+          : ''}
+        ${this.articlesResults?.length
+          ? html`
+              <div class="search-box__result-heading type--label">
+                ${this.articlesLabel.toUpperCase()}
+              </div>
+              ${this.articlesResults.map(this.renderResult)}
+            `
+          : ''}
+        ${this.docsResults.length
+          ? html`
+              <div class="search-box__result-heading type--label">
+                ${this.docsLabel.toUpperCase()}
+              </div>
+              ${this.docsResults.map(this.renderResult)}
+            `
+          : ''}
       </div>
     `;
   }

@@ -97,8 +97,5 @@
   },
   "devtools-architecture": {
     "title": "i18n.tags.devtools-architecture"
-  },
-  "example": {
-    "title": "i18n.tags.example"
   }
 }

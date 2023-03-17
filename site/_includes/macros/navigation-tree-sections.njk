@@ -8,11 +8,10 @@ and marks it as active.
 {# toc defines the table of contents that appears to the left of the documentation. #}
 {% set toc = docs[project_key].toc %}
 {% set expandedSections = helpers.expandSections(toc, page.url, locale) %}
-{% set tocDepth = 0 %}
-{{ navigationTreeSectionsInternal(expandedSections, tocDepth) }}
+{{ navigationTreeSectionsInternal(expandedSections) }}
 {% endmacro %}
 
-{% macro navigationTreeSectionsInternal(expandedSections, tocDepth) %}
+{% macro navigationTreeSectionsInternal(expandedSections) %}
 {% for item in expandedSections %}
   {% if item.sections %}
     <button class="navigation-tree__link button" data-expandable aria-expanded="{{ item.active }}">
@@ -21,8 +20,8 @@ and marks it as active.
       </div>
       <span class="section-title">{{ item.title | i18n }}</span>
     </button>
-    <div class="navigation-tree__nested" data-depth={{tocDepth}}>
-      {{ navigationTreeSectionsInternal(item.sections, (tocDepth + 1)) }}
+    <div class="navigation-tree__nested">
+      {{ navigationTreeSectionsInternal(item.sections) }}
     </div>
   {% elif item.url %}
     {#
